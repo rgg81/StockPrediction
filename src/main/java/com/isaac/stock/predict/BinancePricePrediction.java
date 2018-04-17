@@ -91,35 +91,20 @@ public class BinancePricePrediction {
 
     /** Predict one feature of a stock one-day ahead */
     private static void predictPriceOneAhead (MultiLayerNetwork net, DataSetIterator testData, NormalizerStandardize normalizer) {
-        double[] predicts = new double[testData.numExamples()];
-        double[] actuals = new double[testData.numExamples()];
-        int i = 0;
+
         while (testData.hasNext()) {
             DataSet ds = testData.next();
+            INDArray output = net.output(ds.getFeatures());
+            INDArray labels = ds.getLabels();
 
+            normalizer.revertLabels(output);
+            normalizer.revertLabels(labels);
 
-            int total = ds.getLabels().size(0);
-            for (int j = 0; j < total; j++) {
-                INDArray rowFeatures = ds.getFeatureMatrix().getRow(i);
-                INDArray rowLabel = ds.getLabels().getRow(i);
-//                int timeSeriesLength = rowFeatures.size(2);
-//                log.info("timeSeriesLength:{}",timeSeriesLength);
-//                INDArray output = net.rnnTimeStep(rowFeatures)[0];
-                INDArray res = net.rnnTimeStep(rowFeatures);
-
-                normalizer.revertLabels(res);
-                normalizer.revertLabels(rowLabel);
-
-//                res.shapeInfoToString()
-                predicts[i] = res.tensorAlongDimension(res.size(2)-1,1,0).getDouble(0);
-                actuals[i] = rowLabel.getDouble(0);
-                i++;
-
+            for (int i = 0; i < labels.rows(); i++) {
+                log.info("expected:{} predicted:{}", labels.getRow(i).getDouble(0), output.getRow(i).getDouble(0));
             }
-            log.info("Print out Predictions and Actual Values...");
-            log.info("Predict,Actual");
         }
-        for (int m = 0; m < predicts.length; i++) log.info(predicts[m] + "," + actuals[m]);
+
     }
 
 
