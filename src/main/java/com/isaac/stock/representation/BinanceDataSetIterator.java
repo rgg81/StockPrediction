@@ -94,7 +94,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
 
     @Override public int totalOutcomes() {
 
-        return predictLength;
+        return 9;
     }
 
     @Override public boolean resetSupported() { return false; }
