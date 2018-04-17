@@ -7,6 +7,7 @@ import com.isaac.stock.representation.StockDataSetIterator;
 import com.isaac.stock.utils.PlotUtil;
 import javafx.util.Pair;
 import org.datavec.api.transform.transform.doubletransform.MinMaxNormalizer;
+import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.eval.RegressionEvaluation;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
@@ -39,10 +40,9 @@ public class BinancePricePrediction {
     public static void main (String[] args) throws IOException {
 
 //        int batchSize = 64; // mini-batch size
-        int epochs = 2; // training epochs
+        int epochs = 100; // training epochs
 
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
-        normalizer.fitLabel(true);
 
         log.info("Create dataSet iterator...");
         BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
@@ -63,15 +63,11 @@ public class BinancePricePrediction {
 
         for (int i = 0; i < epochs; i++) {
             log.info("Training... epoch: {}", i);
-            while (trainData.hasNext()) net.fit(trainData.next()); // fit model using mini-batch data
-            RegressionEvaluation evaluation = new RegressionEvaluation(1);
-            DataSet testDS = testData.next();
-            evaluation.evalTimeSeries(testDS.getLabels(),net.output(testDS.getFeatures(),false));
-            System.out.println(evaluation.stats());
-            trainData.reset(); // reset iterator
-            testData.reset();
+            net.fit(trainData);
 
-            net.rnnClearPreviousState(); // clear previous state
+            Evaluation evaluation = net.evaluate(testData);
+            System.out.println(evaluation.confusionToString());
+            System.out.println(evaluation.stats());
         }
 
         log.info("Saving model...");

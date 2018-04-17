@@ -2,10 +2,7 @@ package com.isaac.stock.model;
 
 import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
-import org.deeplearning4j.nn.conf.BackpropType;
-import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
-import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.Updater;
+import org.deeplearning4j.nn.conf.*;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.GravesLSTM;
 import org.deeplearning4j.nn.conf.layers.RnnOutputLayer;
@@ -16,6 +13,7 @@ import org.deeplearning4j.ui.api.UIServer;
 import org.deeplearning4j.ui.stats.StatsListener;
 import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.learning.config.Nesterovs;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 /**
@@ -38,13 +36,13 @@ public class RecurrentNets {
     public static MultiLayerNetwork buildLstmNetworks(int nIn, int nOut) {
 
         //Initialize the user interface backend
-//        UIServer uiServer = UIServer.getInstance();
+        UIServer uiServer = UIServer.getInstance();
 
         //Configure where the network information (gradients, score vs. time etc) is to be stored. Here: store in memory.
-//        StatsStorage statsStorage = new InMemoryStatsStorage();         //Alternative: new FileStatsStorage(File), for saving and loading later
+        StatsStorage statsStorage = new InMemoryStatsStorage();         //Alternative: new FileStatsStorage(File), for saving and loading later
 
         //Attach the StatsStorage instance to the UI: this allows the contents of the StatsStorage to be visualized
-//        uiServer.attach(statsStorage);
+        uiServer.attach(statsStorage);
 
         //Then add the StatsListener to collect this information from the network, as it trains
 
@@ -55,7 +53,9 @@ public class RecurrentNets {
                 .learningRate(learningRate)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .weightInit(WeightInit.XAVIER)
-                .updater(Updater.NESTEROVS).momentum(0.9)
+                .updater(new Nesterovs(0.005))
+                .gradientNormalization(GradientNormalization.ClipElementWiseAbsoluteValue)  //Not always required, but helps with this data set
+                .gradientNormalizationThreshold(0.5)
                 .regularization(true)
                 .l2(1e-4)
                 .list()
@@ -81,19 +81,19 @@ public class RecurrentNets {
                 .layer(3, new RnnOutputLayer.Builder()
                         .nIn(denseLayerSize)
                         .nOut(nOut)
-                        .activation(Activation.IDENTITY)
-                        .lossFunction(LossFunctions.LossFunction.MSE)
+                        .activation(Activation.SOFTMAX)
+                        .lossFunction(LossFunctions.LossFunction.MCXENT)
                         .build())
-                .backpropType(BackpropType.TruncatedBPTT)
-                .tBPTTForwardLength(truncatedBPTTLength)
-                .tBPTTBackwardLength(truncatedBPTTLength)
+//                .backpropType(BackpropType.TruncatedBPTT)
+//                .tBPTTForwardLength(truncatedBPTTLength)
+//                .tBPTTBackwardLength(truncatedBPTTLength)
                 .pretrain(false)
                 .backprop(true)
                 .build();
 
         MultiLayerNetwork net = new MultiLayerNetwork(conf);
         net.init();
-        net.setListeners(new ScoreIterationListener(1));
+        net.setListeners(new StatsListener(statsStorage));
 
         return net;
     }
