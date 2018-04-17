@@ -90,10 +90,10 @@ public class BinancePricePrediction2 {
 
         //Init rrnTimeStemp with train data and predict test data
 
-        while (trainDataUp.hasNext()) {
-            DataSet t = trainDataUp.next();
-            net.rnnTimeStep(t.getFeatures());
-        }
+//        while (trainDataUp.hasNext()) {
+//            DataSet t = trainDataUp.next();
+//            net.rnnTimeStep(t.getFeatures());
+//        }
 
         trainDataUp.reset();
 

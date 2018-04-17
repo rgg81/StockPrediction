@@ -25,7 +25,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 public class RecurrentNets {
 	
 //	private static final double learningRate = 0.05;
-    private static final double learningRate = 0.1;
+    private static final double learningRate = 0.01;
 	private static final int iterations = 1;
 	private static final int seed = 12345;
 
