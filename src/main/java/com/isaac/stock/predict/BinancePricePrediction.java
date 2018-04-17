@@ -65,7 +65,7 @@ public class BinancePricePrediction {
             log.info("Training... epoch: {}", i);
             net.fit(trainData);
 
-            Evaluation evaluation = net.evaluate(testData.next());
+            Evaluation evaluation = net.evaluate(testData);
             System.out.println(evaluation.confusionToString());
             System.out.println(evaluation.stats());
         }
