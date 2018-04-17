@@ -44,9 +44,9 @@ public class BinancePricePrediction {
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
 
         log.info("Create dataSet iterator...");
-        BinanceDataSetIterator trainData = new BinanceDataSetIterator(160,0);
+        BinanceDataSetIterator trainData = new BinanceDataSetIterator(600,0);
         log.info("Load test dataset...");
-        BinanceDataSetIterator testData = new BinanceDataSetIterator(180, 161);
+        BinanceDataSetIterator testData = new BinanceDataSetIterator(631, 601);
 
         log.info("Build lstm networks...");
         MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
