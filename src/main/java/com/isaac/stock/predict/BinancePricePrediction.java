@@ -46,7 +46,7 @@ public class BinancePricePrediction {
         log.info("Create dataSet iterator...");
         BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
         log.info("Load test dataset...");
-        BinanceDataSetIterator testData = new BinanceDataSetIterator(170, 151);
+        BinanceDataSetIterator testData = new BinanceDataSetIterator(159, 151);
 
         log.info("Build lstm networks...");
         MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
@@ -94,17 +94,20 @@ public class BinancePricePrediction {
 
         while (testData.hasNext()) {
             DataSet ds = testData.next();
-            double[] output = net.output(ds.getFeatures(), false).data().asDouble();
-            double[] labels = ds.getLabels().data().asDouble();
+            INDArray output = net.output(ds.getFeatures(), false);
+            INDArray labels = ds.getLabels();
+
+
+            log.info("isFitLabel:{}", normalizer.isFitLabel());
+            normalizer.revertLabels(output);
+            normalizer.revertLabels(labels);
 
             //first 50
             for (int i = 0; i < 50; i++) {
-                log.info("Data output:{} data labels:{}",output[i],labels[i]);
+                log.info("Data output:{} data labels:{}",output.getRow(i).getDouble(0),labels.getRow(i).getDouble(0));
             }
-            log.info("Data length:{}", output.length);
 
-//            normalizer.revertLabels(output);
-//            normalizer.revertLabels(labels);
+
 
         }
 

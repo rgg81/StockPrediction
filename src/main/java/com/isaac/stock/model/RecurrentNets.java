@@ -29,11 +29,11 @@ public class RecurrentNets {
 	private static final int iterations = 1;
 	private static final int seed = 12345;
 
-    private static final int lstmLayer1Size = 256;
+    private static final int lstmLayer1Size = 512;
     private static final int lstmLayer2Size = 256;
-    private static final int denseLayerSize = 256;
+    private static final int denseLayerSize = 128;
     private static final double dropoutRatio = 0.2;
-    private static final int truncatedBPTTLength = 70;
+    private static final int truncatedBPTTLength = 140;
 
     public static MultiLayerNetwork buildLstmNetworks(int nIn, int nOut) {
 
