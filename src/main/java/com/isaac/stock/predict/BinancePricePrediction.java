@@ -97,7 +97,7 @@ public class BinancePricePrediction {
             INDArray output = net.output(ds.getFeatures());
             INDArray labels = ds.getLabels();
 
-            normalizer.revertLabels(output);
+//            normalizer.revertLabels(output);
             normalizer.revertLabels(labels);
 
             for (int i = 0; i < labels.size(0); i++) {
