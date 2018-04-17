@@ -29,11 +29,11 @@ public class RecurrentNets {
 	private static final int iterations = 1;
 	private static final int seed = 12345;
 
-    private static final int lstmLayer1Size = 1024;
+    private static final int lstmLayer1Size = 256;
     private static final int lstmLayer2Size = 256;
-    private static final int denseLayerSize = 32;
+    private static final int denseLayerSize = 256;
     private static final double dropoutRatio = 0.2;
-    private static final int truncatedBPTTLength = 140;
+    private static final int truncatedBPTTLength = 70;
 
     public static MultiLayerNetwork buildLstmNetworks(int nIn, int nOut) {
 
@@ -63,15 +63,15 @@ public class RecurrentNets {
                         .nIn(nIn)
                         .nOut(lstmLayer1Size)
                         .activation(Activation.TANH)
-//                        .gateActivationFunction(Activation.HARDSIGMOID)
-//                        .dropOut(dropoutRatio)
+                        .gateActivationFunction(Activation.HARDSIGMOID)
+                        .dropOut(dropoutRatio)
                         .build())
                 .layer(1, new GravesLSTM.Builder()
                         .nIn(lstmLayer1Size)
                         .nOut(lstmLayer2Size)
                         .activation(Activation.TANH)
-//                        .gateActivationFunction(Activation.HARDSIGMOID)
-//                        .dropOut(dropoutRatio)
+                        .gateActivationFunction(Activation.HARDSIGMOID)
+                        .dropOut(dropoutRatio)
                         .build())
                 .layer(2, new DenseLayer.Builder()
                 		.nIn(lstmLayer2Size)
