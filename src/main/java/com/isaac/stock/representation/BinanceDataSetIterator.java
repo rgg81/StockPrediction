@@ -34,6 +34,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
     private int startIteration;
 
     private int currentIteration;
+    private DataSetPreProcessor dataSetPreProcessor;
 
     private File baseDir = new File("/home/roberto/binance-data-train");
     private File featuresDir = new File(baseDir, "features");
@@ -59,6 +60,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
             CSVSequenceRecordReader trainLabelsUp = new CSVSequenceRecordReader(1, ",");
             trainLabelsUp.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", currentIteration, end));
             SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true);
+            trainDataUp.setPreProcessor(dataSetPreProcessor);
             currentIteration = end + 1;
             return trainDataUp.next();
         } catch (Exception e) {
@@ -102,10 +104,10 @@ public class BinanceDataSetIterator implements DataSetIterator {
     @Override public int numExamples() { return totalExamples(); }
 
     @Override public void setPreProcessor(DataSetPreProcessor dataSetPreProcessor) {
-        throw new UnsupportedOperationException("Not Implemented");
+        this.dataSetPreProcessor = dataSetPreProcessor;
     }
 
-    @Override public DataSetPreProcessor getPreProcessor() { throw new UnsupportedOperationException("Not Implemented"); }
+    @Override public DataSetPreProcessor getPreProcessor() { return dataSetPreProcessor; }
 
     @Override public List<String> getLabels() { throw new UnsupportedOperationException("Not Implemented"); }
 
