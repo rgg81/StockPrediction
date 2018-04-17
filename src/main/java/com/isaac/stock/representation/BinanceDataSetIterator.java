@@ -115,7 +115,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
 
     @Override public DataSetPreProcessor getPreProcessor() { return dataSetPreProcessor; }
 
-    @Override public List<String> getLabels() { throw new UnsupportedOperationException("Not Implemented"); }
+    @Override public List<String> getLabels() { return Arrays.asList("0","1","2","3","4","5","6","7","8"); }
 
     @Override public boolean hasNext() { return currentIteration < maxIteration; }
 
