@@ -43,9 +43,9 @@ public class BinancePricePrediction {
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
 
         log.info("Create dataSet iterator...");
-        BinanceDataSetIterator trainData = new BinanceDataSetIterator(630,0);
+        BinanceDataSetIterator trainData = new BinanceDataSetIterator(160,0);
         log.info("Load test dataset...");
-        BinanceDataSetIterator testData = new BinanceDataSetIterator(665, 631);
+        BinanceDataSetIterator testData = new BinanceDataSetIterator(180, 161);
 
         log.info("Build lstm networks...");
         MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
@@ -94,6 +94,7 @@ public class BinancePricePrediction {
                 INDArray rowFeatures = ds.getFeatureMatrix().getRow(i);
                 INDArray rowLabel = ds.getLabels().getRow(i);
                 int timeSeriesLength = rowFeatures.size(2);
+                log.info("timeSeriesLength:{}",timeSeriesLength);
                 INDArray res = net.rnnTimeStep(rowFeatures);
 
                 normalizer.revertLabels(res);

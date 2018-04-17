@@ -11,6 +11,8 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.DataSetPreProcessor;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -25,6 +27,7 @@ import java.util.*;
 public class BinanceDataSetIterator implements DataSetIterator {
 
 
+    private static final Logger log = LoggerFactory.getLogger(BinanceDataSetIterator.class);
     private int predictLength = 1; // default 1, say, one day ahead prediction
 
     private int maxIteration;
@@ -50,11 +53,12 @@ public class BinanceDataSetIterator implements DataSetIterator {
     public DataSet next(int num) {
         try {
             int end = currentIteration + offsetIteration;
+            log.info("currentIteration:{} end:{}",currentIteration,end);
             CSVSequenceRecordReader trainFeaturesUp = new CSVSequenceRecordReader(1, ",");
             trainFeaturesUp.initialize(new NumberedFileInputSplit(featuresDir.getAbsolutePath() + "/features-clean-%d.csv", currentIteration, end));
             CSVSequenceRecordReader trainLabelsUp = new CSVSequenceRecordReader(1, ",");
             trainLabelsUp.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", currentIteration, end));
-            SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, 1, true);
+            SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true);
             currentIteration = end + 1;
             return trainDataUp.next();
         } catch (Exception e) {
@@ -71,7 +75,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
             trainFeaturesUp.initialize(new NumberedFileInputSplit(featuresDir.getAbsolutePath() + "/features-clean-%d.csv", 0, 3));
             CSVSequenceRecordReader trainLabelsUp = new CSVSequenceRecordReader(1, ",");
             trainLabelsUp.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", 0, 3));
-            SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, 1, true);
+            SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true);
             return trainDataUp.inputColumns();
         } catch (Exception e){
             throw new IllegalArgumentException("Error in parsing files",e);
