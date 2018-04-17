@@ -62,7 +62,11 @@ public class BinanceDataSetIterator implements DataSetIterator {
             SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true);
             trainDataUp.setPreProcessor(dataSetPreProcessor);
             currentIteration = end + 1;
-            return trainDataUp.next();
+            DataSet resultDs = trainDataUp.next();
+            if(trainDataUp.hasNext()) {
+                log.error("there is a next here... why????");
+            }
+            return resultDs;
         } catch (Exception e) {
             throw new IllegalArgumentException("Error in parsing files", e);
         }

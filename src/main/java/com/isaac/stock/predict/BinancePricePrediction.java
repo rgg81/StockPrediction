@@ -7,6 +7,7 @@ import com.isaac.stock.representation.StockDataSetIterator;
 import com.isaac.stock.utils.PlotUtil;
 import javafx.util.Pair;
 import org.datavec.api.transform.transform.doubletransform.MinMaxNormalizer;
+import org.deeplearning4j.eval.RegressionEvaluation;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -58,10 +59,14 @@ public class BinancePricePrediction {
         trainData.setPreProcessor(normalizer);
         testData.setPreProcessor(normalizer);
 
-        log.info("Training...");
+
         for (int i = 0; i < epochs; i++) {
+            log.info("Training... epoch: {}", i);
             while (trainData.hasNext()) net.fit(trainData.next()); // fit model using mini-batch data
+            RegressionEvaluation eval = net.evaluateRegression(testData);
+            log.info(eval.stats());
             trainData.reset(); // reset iterator
+            testData.reset();
             net.rnnClearPreviousState(); // clear previous state
         }
 
