@@ -102,9 +102,9 @@ public class BinancePricePrediction {
             normalizer.revertLabels(labels);
 
             for (int i = 0; i < labels.size(0); i++) {
-                INDArray rowResult = labels.getRow(i).dup();
+                INDArray rowResult = output.getRow(i).dup();
                 normalizer.revertLabels(rowResult);
-                log.info("expected:{} predicted:{} {}", labels.getRow(i).getDouble(0), rowResult.getDouble(0),rowResult.getDouble(1));
+                log.info("expected:{} predicted:{} {}", labels.getRow(i).getDouble(0), rowResult.getDouble(0), rowResult.getDouble(1));
             }
         }
 
