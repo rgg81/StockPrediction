@@ -55,7 +55,7 @@ public class RecurrentNets {
                 .learningRate(learningRate)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .weightInit(WeightInit.XAVIER)
-                .updater(Updater.RMSPROP)
+                .updater(Updater.NESTEROVS)
                 .regularization(true)
                 .l2(1e-4)
                 .list()
