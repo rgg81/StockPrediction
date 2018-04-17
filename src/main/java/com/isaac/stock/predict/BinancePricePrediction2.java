@@ -1,5 +1,6 @@
 package com.isaac.stock.predict;
 
+import com.isaac.stock.model.RecurrentNets;
 import org.datavec.api.records.reader.impl.csv.CSVSequenceRecordReader;
 import org.datavec.api.split.NumberedFileInputSplit;
 import org.deeplearning4j.datasets.datavec.SequenceRecordReaderDataSetIterator;
@@ -57,24 +58,9 @@ public class BinancePricePrediction2 {
         trainDataUp.setPreProcessor(normalizer);
         testDataIter.setPreProcessor(normalizer);
 
-        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
-                .seed(140)
-                .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-                .iterations(1)
-                .weightInit(WeightInit.XAVIER)
-                .updater(Updater.NESTEROVS).momentum(0.9)
-                .learningRate(0.15)
-                .list()
-                .layer(0, new GravesLSTM.Builder().activation(Activation.TANH).nIn(trainDataUp.inputColumns()).nOut(1500)
-                        .build())
-                .layer(1, new RnnOutputLayer.Builder(LossFunctions.LossFunction.MSE)
-                        .activation(Activation.IDENTITY).nIn(1500).nOut(1).build())
-                .build();
 
-        MultiLayerNetwork net = new MultiLayerNetwork(conf);
-        net.init();
 
-        net.setListeners(new ScoreIterationListener(20));
+        MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainDataUp.inputColumns(),1);
 
         // ----- Train the network, evaluating the test set performance at each epoch -----
         int nEpochs = 50;
