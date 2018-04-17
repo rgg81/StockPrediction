@@ -54,6 +54,9 @@ public class BinancePricePrediction2 {
         SequenceRecordReaderDataSetIterator testDataIter = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true,
                 SequenceRecordReaderDataSetIterator.AlignmentMode.ALIGN_END);
 
+        trainDataUp.setPreProcessor(normalizer);
+        testDataIter.setPreProcessor(normalizer);
+
         MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(140)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
