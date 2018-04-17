@@ -39,7 +39,7 @@ public class BinancePricePrediction {
     public static void main (String[] args) throws IOException {
 
 //        int batchSize = 64; // mini-batch size
-        int epochs = 100; // training epochs
+        int epochs = 2; // training epochs
 
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
         normalizer.fitLabel(true);
