@@ -53,7 +53,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
     @Override
     public DataSet next(int num) {
         try {
-            int end = currentIteration + offsetIteration;
+            int end = Math.min(maxIteration,currentIteration + offsetIteration);
             log.info("currentIteration:{} end:{}",currentIteration,end);
             CSVSequenceRecordReader trainFeaturesUp = new CSVSequenceRecordReader(1, ",");
             trainFeaturesUp.initialize(new NumberedFileInputSplit(featuresDir.getAbsolutePath() + "/features-clean-%d.csv", currentIteration, end));
