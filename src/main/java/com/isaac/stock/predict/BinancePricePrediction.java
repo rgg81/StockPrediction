@@ -41,7 +41,7 @@ public class BinancePricePrediction {
 //        int batchSize = 64; // mini-batch size
         int epochs = 100; // training epochs
 
-        NormalizerStandardize normalizer = new NormalizerStandardize();
+        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
 
         log.info("Create dataSet iterator...");
         BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
@@ -90,7 +90,7 @@ public class BinancePricePrediction {
     }
 
     /** Predict one feature of a stock one-day ahead */
-    private static void predictPriceOneAhead (MultiLayerNetwork net, DataSetIterator testData, NormalizerStandardize normalizer) {
+    private static void predictPriceOneAhead (MultiLayerNetwork net, DataSetIterator testData, NormalizerMinMaxScaler normalizer) {
 
         while (testData.hasNext()) {
             DataSet ds = testData.next();
