@@ -42,7 +42,7 @@ public class BinancePricePrediction {
 //        int batchSize = 64; // mini-batch size
         int epochs = 100; // training epochs
 
-        NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
+        NormalizerStandardize normalizer = new NormalizerStandardize();
 
         log.info("Create dataSet iterator...");
         BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
@@ -68,6 +68,9 @@ public class BinancePricePrediction {
             Evaluation evaluation = net.evaluate(testData);
             System.out.println(evaluation.confusionToString());
             System.out.println(evaluation.stats());
+
+            trainData.reset();
+            testData.reset();
         }
 
         log.info("Saving model...");
