@@ -67,6 +67,10 @@ public class BinancePricePrediction {
             log.info(eval.stats());
             trainData.reset(); // reset iterator
             testData.reset();
+
+            predictPriceOneAhead(net, testData, normalizer);
+            testData.reset();
+            
             net.rnnClearPreviousState(); // clear previous state
         }
 
