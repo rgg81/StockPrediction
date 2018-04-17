@@ -51,7 +51,7 @@ public class BinancePricePrediction2 {
         testFeatures.initialize(new NumberedFileInputSplit(featuresDir.getAbsolutePath() + "/features-clean-%d.csv", 151, 159));
         CSVSequenceRecordReader testLabels = new CSVSequenceRecordReader(1, ",");
         testLabels.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", 151, 159));
-        SequenceRecordReaderDataSetIterator testDataIter = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true,
+        SequenceRecordReaderDataSetIterator testDataIter = new SequenceRecordReaderDataSetIterator(testFeatures, testLabels, miniBatchSize, -1, true,
                 SequenceRecordReaderDataSetIterator.AlignmentMode.ALIGN_END);
 
         trainDataUp.setPreProcessor(normalizer);
