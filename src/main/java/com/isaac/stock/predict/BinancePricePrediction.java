@@ -13,6 +13,7 @@ import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.DataSetPreProcessor;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.Normalizer;
 import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
@@ -83,34 +84,34 @@ public class BinancePricePrediction {
 
         log.info("Testing...");
 
-        predictPriceOneAhead(net, testData, normalizer);
+//        predictPriceOneAhead(net, testData, normalizer);
 
         log.info("Done...");
     }
 
     /** Predict one feature of a stock one-day ahead */
-    private static void predictPriceOneAhead (MultiLayerNetwork net, DataSetIterator testData, NormalizerMinMaxScaler normalizer) {
-
-        while (testData.hasNext()) {
-            DataSet ds = testData.next();
-            INDArray output = net.output(ds.getFeatures(), false);
-            INDArray labels = ds.getLabels();
-
-
-            log.info("isFitLabel:{}", normalizer.isFitLabel());
-            normalizer.revertLabels(output);
-            normalizer.revertLabels(labels);
-
-            //first 50
-            for (int i = 0; i < 50; i++) {
-                log.info("Data output:{} data labels:{}",output.getRow(i).getDouble(0),labels.getRow(i).getDouble(0));
-            }
-
-
-
-        }
-
-    }
+//    private static void predictPriceOneAhead (MultiLayerNetwork net, DataSetIterator testData) {
+//
+//        while (testData.hasNext()) {
+//            DataSet ds = testData.next();
+//            INDArray output = net.output(ds.getFeatures(), false);
+//            INDArray labels = ds.getLabels();
+//
+//
+//            log.info("isFitLabel:{}", normalizer.isFitLabel());
+//            normalizer.revertLabels(output);
+//            normalizer.revertLabels(labels);
+//
+//            //first 50
+//            for (int i = 0; i < 50; i++) {
+//                log.info("Data output:{} data labels:{}",output.getRow(i).getDouble(0),labels.getRow(i).getDouble(0));
+//            }
+//
+//
+//
+//        }
+//
+//    }
 
 
 
