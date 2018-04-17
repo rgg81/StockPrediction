@@ -44,20 +44,20 @@ public class BinancePricePrediction {
         NormalizerStandardize normalizer = new NormalizerStandardize();
 
         log.info("Create dataSet iterator...");
-        BinanceDataSetIterator trainData = new BinanceDataSetIterator(600,0);
+        BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
         log.info("Load test dataset...");
-        BinanceDataSetIterator testData = new BinanceDataSetIterator(631, 601);
+        BinanceDataSetIterator testData = new BinanceDataSetIterator(170, 151);
 
         log.info("Build lstm networks...");
         MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
 
 
-        log.info("Normalizing..");
-        while (trainData.hasNext()) normalizer.fit(trainData.next());
-        trainData.reset();
+//        log.info("Normalizing..");
+//        while (trainData.hasNext()) normalizer.fit(trainData.next());
+//        trainData.reset();
 
-        trainData.setPreProcessor(normalizer);
-        testData.setPreProcessor(normalizer);
+//        trainData.setPreProcessor(normalizer);
+//        testData.setPreProcessor(normalizer);
 
 
         for (int i = 0; i < epochs; i++) {
@@ -94,18 +94,17 @@ public class BinancePricePrediction {
 
         while (testData.hasNext()) {
             DataSet ds = testData.next();
-            INDArray output = net.output(ds.getFeatures());
-            INDArray labels = ds.getLabels();
+            double[] output = net.output(ds.getFeatures(), false).data().asDouble();
+            double[] labels = ds.getLabels().data().asDouble();
+
+            for (int i = 0; i < output.length; i++) {
+                log.info("Data output:{} data labels:{}",output[i],labels[i]);
+            }
 
 
 //            normalizer.revertLabels(output);
-            normalizer.revertLabels(labels);
+//            normalizer.revertLabels(labels);
 
-            for (int i = 0; i < labels.size(0); i++) {
-                INDArray rowResult = output.getRow(i).dup();
-                normalizer.revertLabels(rowResult);
-                log.info("expected:{} predicted:{} {}", labels.getRow(i).getDouble(0), rowResult.getDouble(0), rowResult.getDouble(1));
-            }
         }
 
     }
