@@ -63,7 +63,7 @@ public class BinancePricePrediction2 {
         MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainDataUp.inputColumns(),1);
 
         // ----- Train the network, evaluating the test set performance at each epoch -----
-        int nEpochs = 50;
+        int nEpochs = 5;
 
         for (int i = 0; i < nEpochs; i++) {
             net.fit(trainDataUp);
