@@ -30,8 +30,8 @@ public class RecurrentNets {
 	private static final int seed = 12345;
 
     private static final int lstmLayer1Size = 1024;
-    private static final int lstmLayer2Size = 512;
-    private static final int denseLayerSize = 512;
+    private static final int lstmLayer2Size = 256;
+    private static final int denseLayerSize = 32;
     private static final double dropoutRatio = 0.2;
     private static final int truncatedBPTTLength = 140;
 
@@ -55,7 +55,7 @@ public class RecurrentNets {
                 .learningRate(learningRate)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
                 .weightInit(WeightInit.XAVIER)
-                .updater(Updater.NESTEROVS)
+                .updater(Updater.RMSPROP)
                 .regularization(true)
                 .l2(1e-4)
                 .list()
