@@ -42,6 +42,7 @@ public class BinancePricePrediction {
         int epochs = 100; // training epochs
 
         NormalizerMinMaxScaler normalizer = new NormalizerMinMaxScaler();
+        normalizer.fitLabel(true);
 
         log.info("Create dataSet iterator...");
         BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
@@ -63,12 +64,11 @@ public class BinancePricePrediction {
         for (int i = 0; i < epochs; i++) {
             log.info("Training... epoch: {}", i);
             while (trainData.hasNext()) net.fit(trainData.next()); // fit model using mini-batch data
-            RegressionEvaluation eval = net.evaluateRegression(testData);
-            log.info(eval.stats());
+            RegressionEvaluation evaluation = new RegressionEvaluation(1);
+            DataSet testDS = testData.next();
+            evaluation.evalTimeSeries(testDS.getLabels(),net.output(testDS.getFeatures(),false));
+            System.out.println(evaluation.stats());
             trainData.reset(); // reset iterator
-            testData.reset();
-
-            predictPriceOneAhead(net, testData, normalizer);
             testData.reset();
 
             net.rnnClearPreviousState(); // clear previous state
