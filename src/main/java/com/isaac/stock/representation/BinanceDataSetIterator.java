@@ -34,7 +34,7 @@ public class BinanceDataSetIterator implements DataSetIterator {
     private int startIteration;
 
     private int currentIteration;
-    private DataSetPreProcessor dataSetPreProcessor;
+    private DataSetPreProcessor dataSetPreProcessor = null;
 
     private File baseDir = new File("/home/roberto/binance-data-train");
     private File featuresDir = new File(baseDir, "features");
@@ -61,7 +61,8 @@ public class BinanceDataSetIterator implements DataSetIterator {
             trainLabelsUp.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", currentIteration, end));
             SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, -1, true,
                     SequenceRecordReaderDataSetIterator.AlignmentMode.ALIGN_END);
-            trainDataUp.setPreProcessor(dataSetPreProcessor);
+            if(dataSetPreProcessor != null)
+                trainDataUp.setPreProcessor(dataSetPreProcessor);
             currentIteration = end + 1;
             DataSet resultDs = trainDataUp.next();
             if(trainDataUp.hasNext()) {

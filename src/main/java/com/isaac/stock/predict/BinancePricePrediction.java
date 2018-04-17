@@ -52,12 +52,12 @@ public class BinancePricePrediction {
         MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
 
 
-//        log.info("Normalizing..");
-//        while (trainData.hasNext()) normalizer.fit(trainData.next());
-//        trainData.reset();
+        log.info("Normalizing..");
+        normalizer.fit(trainData);
+        trainData.reset();
 
-//        trainData.setPreProcessor(normalizer);
-//        testData.setPreProcessor(normalizer);
+        trainData.setPreProcessor(normalizer);
+        testData.setPreProcessor(normalizer);
 
 
         for (int i = 0; i < epochs; i++) {
@@ -97,6 +97,7 @@ public class BinancePricePrediction {
             double[] output = net.output(ds.getFeatures(), false).data().asDouble();
             double[] labels = ds.getLabels().data().asDouble();
 
+            log.info("Data length:{}",output.length);
             for (int i = 0; i < output.length; i++) {
                 log.info("Data output:{} data labels:{}",output[i],labels[i]);
             }
