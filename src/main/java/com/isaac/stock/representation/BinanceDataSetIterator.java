@@ -80,9 +80,9 @@ public class BinanceDataSetIterator implements DataSetIterator {
     @Override public int inputColumns() {
         try{
             CSVSequenceRecordReader trainFeaturesUp = new CSVSequenceRecordReader(1, ",");
-            trainFeaturesUp.initialize(new NumberedFileInputSplit(featuresDir.getAbsolutePath() + "/features-clean-%d.csv", 0, 3));
+            trainFeaturesUp.initialize(new NumberedFileInputSplit(featuresDir.getAbsolutePath() + "/features-clean-%d.csv", 0, 10));
             CSVSequenceRecordReader trainLabelsUp = new CSVSequenceRecordReader(1, ",");
-            trainLabelsUp.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", 0, 3));
+            trainLabelsUp.initialize(new NumberedFileInputSplit(labelsDir.getAbsolutePath() + "/export-BTC-USDT-indicators-label-binance-up-%d.csv", 0, 10));
             SequenceRecordReaderDataSetIterator trainDataUp = new SequenceRecordReaderDataSetIterator(trainFeaturesUp, trainLabelsUp, miniBatchSize, 9, false);
             return trainDataUp.inputColumns();
         } catch (Exception e){
