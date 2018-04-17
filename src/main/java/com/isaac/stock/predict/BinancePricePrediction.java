@@ -70,7 +70,7 @@ public class BinancePricePrediction {
 
             predictPriceOneAhead(net, testData, normalizer);
             testData.reset();
-            
+
             net.rnnClearPreviousState(); // clear previous state
         }
 
@@ -102,14 +102,16 @@ public class BinancePricePrediction {
             for (int j = 0; j < total; j++) {
                 INDArray rowFeatures = ds.getFeatureMatrix().getRow(i);
                 INDArray rowLabel = ds.getLabels().getRow(i);
-                int timeSeriesLength = rowFeatures.size(2);
-                log.info("timeSeriesLength:{}",timeSeriesLength);
+//                int timeSeriesLength = rowFeatures.size(2);
+//                log.info("timeSeriesLength:{}",timeSeriesLength);
+//                INDArray output = net.rnnTimeStep(rowFeatures)[0];
                 INDArray res = net.rnnTimeStep(rowFeatures);
 
                 normalizer.revertLabels(res);
                 normalizer.revertLabels(rowLabel);
 
-                predicts[i] = res.getDouble(timeSeriesLength - 1);
+//                res.shapeInfoToString()
+                predicts[i] = res.tensorAlongDimension(res.size(2)-1,1,0).getDouble(0);
                 actuals[i] = rowLabel.getDouble(0);
                 i++;
 
