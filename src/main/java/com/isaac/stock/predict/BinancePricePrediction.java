@@ -97,11 +97,11 @@ public class BinancePricePrediction {
             double[] output = net.output(ds.getFeatures(), false).data().asDouble();
             double[] labels = ds.getLabels().data().asDouble();
 
-            log.info("Data length:{}",output.length);
-            for (int i = 0; i < output.length; i++) {
+            //first 50
+            for (int i = 0; i < 50; i++) {
                 log.info("Data output:{} data labels:{}",output[i],labels[i]);
             }
-
+            log.info("Data length:{}", output.length);
 
 //            normalizer.revertLabels(output);
 //            normalizer.revertLabels(labels);
