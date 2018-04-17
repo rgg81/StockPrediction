@@ -97,11 +97,14 @@ public class BinancePricePrediction {
             INDArray output = net.output(ds.getFeatures());
             INDArray labels = ds.getLabels();
 
+
 //            normalizer.revertLabels(output);
             normalizer.revertLabels(labels);
 
             for (int i = 0; i < labels.size(0); i++) {
-                log.info("expected:{} predicted:{}", labels.getRow(i).getDouble(0), output.getRow(i).getDouble(0));
+                INDArray rowResult = labels.getRow(i).dup();
+                normalizer.revertLabels(rowResult);
+                log.info("expected:{} predicted:{} {}", labels.getRow(i).getDouble(0), rowResult.getDouble(0),rowResult.getDouble(1));
             }
         }
 
