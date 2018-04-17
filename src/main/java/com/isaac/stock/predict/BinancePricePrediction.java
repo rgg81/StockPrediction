@@ -100,7 +100,7 @@ public class BinancePricePrediction {
             normalizer.revertLabels(output);
             normalizer.revertLabels(labels);
 
-            for (int i = 0; i < labels.rows(); i++) {
+            for (int i = 0; i < labels.size(0); i++) {
                 log.info("expected:{} predicted:{}", labels.getRow(i).getDouble(0), output.getRow(i).getDouble(0));
             }
         }
