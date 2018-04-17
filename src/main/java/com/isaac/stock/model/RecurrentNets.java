@@ -38,13 +38,13 @@ public class RecurrentNets {
     public static MultiLayerNetwork buildLstmNetworks(int nIn, int nOut) {
 
         //Initialize the user interface backend
-        UIServer uiServer = UIServer.getInstance();
+//        UIServer uiServer = UIServer.getInstance();
 
         //Configure where the network information (gradients, score vs. time etc) is to be stored. Here: store in memory.
-        StatsStorage statsStorage = new InMemoryStatsStorage();         //Alternative: new FileStatsStorage(File), for saving and loading later
+//        StatsStorage statsStorage = new InMemoryStatsStorage();         //Alternative: new FileStatsStorage(File), for saving and loading later
 
         //Attach the StatsStorage instance to the UI: this allows the contents of the StatsStorage to be visualized
-        uiServer.attach(statsStorage);
+//        uiServer.attach(statsStorage);
 
         //Then add the StatsListener to collect this information from the network, as it trains
 
@@ -93,7 +93,7 @@ public class RecurrentNets {
 
         MultiLayerNetwork net = new MultiLayerNetwork(conf);
         net.init();
-        net.setListeners(new StatsListener(statsStorage));
+        net.setListeners(new ScoreIterationListener(1));
 
         return net;
     }
