@@ -41,7 +41,8 @@ public class BinancePricePrediction {
     public static void main (String[] args) throws IOException {
 
 //        int batchSize = 64; // mini-batch size
-        int epochs = 4; // training epochs
+//        int epochs = 4; // training epochs
+        int epochs = 1; // training epochs
 
         NormalizerStandardize normalizer = new NormalizerStandardize();
 
@@ -92,8 +93,11 @@ public class BinancePricePrediction {
     /** Predict one feature of a stock one-day ahead */
     private static void predictData (MultiLayerNetwork net, DataSetIterator testData) {
 
-        DataSet ds = testData.next();
+
         INDArray output = net.output(testData, false);
+
+        testData.reset();
+        DataSet ds = testData.next();
         INDArray labels = ds.getLabels();
 
                         //first 50
