@@ -95,11 +95,23 @@ public class BinancePricePrediction {
     private static void predictData (MultiLayerNetwork net, DataSetIterator testData) {
 
 
-        INDArray output = net.output(testData, false);
+        INDArray guesses = net.output(testData, false);
 
         testData.reset();
         DataSet ds = testData.next();
         INDArray labels = ds.getLabels();
+
+        INDArray realOutcomeIndex = Nd4j.argMax(labels, 1);
+        INDArray guessIndex = Nd4j.argMax(guesses, 1);
+
+        int nExamples = realOutcomeIndex.length();
+
+        log.info("total Examples:{}", nExamples);
+        for (int i = 0; i < nExamples; i++) {
+            int actual = (int) realOutcomeIndex.getDouble(i);
+            int predicted = (int) guessIndex.getDouble(i);
+            log.info("actual:{} predicted:{}",actual,predicted);
+        }
 
         log.info("shape info:{} rows:{} columns:{}", labels.shapeInfoToString());
         log.info("shape info row 0:{} rows:{} columns:{}", labels.getRow(0).shapeInfoToString(), labels.getRow(0).rows(), labels.getRow(0).columns());
