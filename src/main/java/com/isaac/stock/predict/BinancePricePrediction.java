@@ -100,9 +100,9 @@ public class BinancePricePrediction {
         testData.reset();
         DataSet ds = testData.next();
         INDArray labels = ds.getLabels();
-        
-        log.info("shape info:{}", labels.shapeInfoToString());
-        log.info("shape info row 0:{}", labels.getRow(0).shapeInfoToString());
+
+        log.info("shape info:{} rows:{} columns:{}", labels.shapeInfoToString(), labels.rows(), labels.columns());
+        log.info("shape info row 0:{} rows:{} columns:{}", labels.getRow(0).shapeInfoToString(), labels.getRow(0).rows(), labels.getRow(0).columns());
 
                         //first 50
 //        for (int i = 0; i < 50; i++) {
