@@ -41,7 +41,7 @@ public class BinancePricePrediction {
     public static void main (String[] args) throws IOException {
 
 //        int batchSize = 64; // mini-batch size
-        int epochs = 100; // training epochs
+        int epochs = 4; // training epochs
 
         NormalizerStandardize normalizer = new NormalizerStandardize();
 
@@ -84,34 +84,28 @@ public class BinancePricePrediction {
 
         log.info("Testing...");
 
-//        predictPriceOneAhead(net, testData, normalizer);
+        predictData(net, testData);
 
         log.info("Done...");
     }
 
     /** Predict one feature of a stock one-day ahead */
-//    private static void predictPriceOneAhead (MultiLayerNetwork net, DataSetIterator testData) {
-//
-//        while (testData.hasNext()) {
-//            DataSet ds = testData.next();
-//            INDArray output = net.output(ds.getFeatures(), false);
-//            INDArray labels = ds.getLabels();
-//
-//
-//            log.info("isFitLabel:{}", normalizer.isFitLabel());
-//            normalizer.revertLabels(output);
-//            normalizer.revertLabels(labels);
-//
-//            //first 50
-//            for (int i = 0; i < 50; i++) {
-//                log.info("Data output:{} data labels:{}",output.getRow(i).getDouble(0),labels.getRow(i).getDouble(0));
-//            }
-//
-//
-//
-//        }
-//
-//    }
+    private static void predictData (MultiLayerNetwork net, DataSetIterator testData) {
+
+        DataSet ds = testData.next();
+        INDArray output = net.output(testData, false);
+        INDArray labels = ds.getLabels();
+
+                        //first 50
+        for (int i = 0; i < 50; i++) {
+            log.info("Data output:{} data labels:{}",(int)output.getRow(i).getDouble(0),(int)labels.getRow(i).getDouble(0));
+        }
+
+
+
+
+
+    }
 
 
 
