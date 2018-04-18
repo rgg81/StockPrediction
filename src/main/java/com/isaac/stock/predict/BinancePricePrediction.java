@@ -101,7 +101,7 @@ public class BinancePricePrediction {
         DataSet ds = testData.next();
         INDArray labels = ds.getLabels();
 
-        log.info("shape info:{} rows:{} columns:{}", labels.shapeInfoToString(), labels.rows(), labels.columns());
+        log.info("shape info:{} rows:{} columns:{}", labels.shapeInfoToString());
         log.info("shape info row 0:{} rows:{} columns:{}", labels.getRow(0).shapeInfoToString(), labels.getRow(0).rows(), labels.getRow(0).columns());
 
                         //first 50
