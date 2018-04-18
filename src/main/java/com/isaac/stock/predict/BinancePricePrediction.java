@@ -42,46 +42,47 @@ public class BinancePricePrediction {
 
 //        int batchSize = 64; // mini-batch size
 //        int epochs = 4; // training epochs
-        int epochs = 1; // training epochs
-
-        NormalizerStandardize normalizer = new NormalizerStandardize();
-
-        log.info("Create dataSet iterator...");
-        BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
+//        int epochs = 1; // training epochs
+//
+//        NormalizerStandardize normalizer = new NormalizerStandardize();
+//
+//        log.info("Create dataSet iterator...");
+//        BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
         log.info("Load test dataset...");
         BinanceDataSetIterator testData = new BinanceDataSetIterator(159, 151);
-
-        log.info("Build lstm networks...");
-        MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
-
-
-        log.info("Normalizing..");
-        normalizer.fit(trainData);
-        trainData.reset();
-
-        trainData.setPreProcessor(normalizer);
-        testData.setPreProcessor(normalizer);
-
-
-        for (int i = 0; i < epochs; i++) {
-            log.info("Training... epoch: {}", i);
-            net.fit(trainData);
-
-            Evaluation evaluation = net.evaluate(testData);
-            System.out.println(evaluation.confusionToString());
-            System.out.println(evaluation.stats());
-
-            trainData.reset();
-            testData.reset();
-        }
-
-        log.info("Saving model...");
+//
+//        log.info("Build lstm networks...");
+//        MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
+//
+//
+//        log.info("Normalizing..");
+//        normalizer.fit(trainData);
+//        trainData.reset();
+//
+//        trainData.setPreProcessor(normalizer);
+//        testData.setPreProcessor(normalizer);
+//
+//
+//        for (int i = 0; i < epochs; i++) {
+//            log.info("Training... epoch: {}", i);
+//            net.fit(trainData);
+//
+//            Evaluation evaluation = net.evaluate(testData);
+//            System.out.println(evaluation.confusionToString());
+//            System.out.println(evaluation.stats());
+//
+//            trainData.reset();
+//            testData.reset();
+//        }
+//
+//        log.info("Saving model...");
         File locationToSave = new File("src/main/resources/StockPriceLSTM_.zip");
-        // saveUpdater: i.e., the state for Momentum, RMSProp, Adagrad etc. Save this to train your network more in the future
-        ModelSerializer.writeModel(net, locationToSave, true);
+//        // saveUpdater: i.e., the state for Momentum, RMSProp, Adagrad etc. Save this to train your network more in the future
+//        ModelSerializer.writeModel(net, locationToSave, true);
 
         log.info("Load model...");
-        net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
+//        net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
+        MultiLayerNetwork net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
 
         log.info("Testing...");
 
@@ -99,11 +100,14 @@ public class BinancePricePrediction {
         testData.reset();
         DataSet ds = testData.next();
         INDArray labels = ds.getLabels();
+        
+        log.info("shape info:{}", labels.shapeInfoToString());
+        log.info("shape info row 0:{}", labels.getRow(0).shapeInfoToString());
 
                         //first 50
-        for (int i = 0; i < 50; i++) {
-            log.info("Data output:{} data labels:{}",(int)output.getRow(i).getDouble(0),(int)labels.getRow(i).getDouble(0));
-        }
+//        for (int i = 0; i < 50; i++) {
+//            log.info("Data output:{} data labels:{}",(int)output.getRow(i).getDouble(0),(int)labels.getRow(i).getDouble(0));
+//        }
 
 
 
