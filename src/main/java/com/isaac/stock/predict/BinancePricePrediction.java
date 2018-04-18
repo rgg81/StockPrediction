@@ -40,49 +40,49 @@ public class BinancePricePrediction {
 
     public static void main (String[] args) throws IOException {
 
-//        int batchSize = 64; // mini-batch size
-//        int epochs = 4; // training epochs
+        int batchSize = 64; // mini-batch size
+        int epochs = 4; // training epochs
 //        int epochs = 1; // training epochs
-//
-//        NormalizerStandardize normalizer = new NormalizerStandardize();
-//
-//        log.info("Create dataSet iterator...");
-//        BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
+
+        NormalizerStandardize normalizer = new NormalizerStandardize();
+
+        log.info("Create dataSet iterator...");
+        BinanceDataSetIterator trainData = new BinanceDataSetIterator(150,0);
         log.info("Load test dataset...");
         BinanceDataSetIterator testData = new BinanceDataSetIterator(159, 151);
-//
-//        log.info("Build lstm networks...");
-//        MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
-//
-//
-//        log.info("Normalizing..");
-//        normalizer.fit(trainData);
-//        trainData.reset();
-//
-//        trainData.setPreProcessor(normalizer);
-//        testData.setPreProcessor(normalizer);
-//
-//
-//        for (int i = 0; i < epochs; i++) {
-//            log.info("Training... epoch: {}", i);
-//            net.fit(trainData);
-//
-//            Evaluation evaluation = net.evaluate(testData);
-//            System.out.println(evaluation.confusionToString());
-//            System.out.println(evaluation.stats());
-//
-//            trainData.reset();
-//            testData.reset();
-//        }
-//
-//        log.info("Saving model...");
+
+        log.info("Build lstm networks...");
+        MultiLayerNetwork net = RecurrentNets.buildLstmNetworks(trainData.inputColumns(), trainData.totalOutcomes());
+
+
+        log.info("Normalizing..");
+        normalizer.fit(trainData);
+        trainData.reset();
+
+        trainData.setPreProcessor(normalizer);
+        testData.setPreProcessor(normalizer);
+
+
+        for (int i = 0; i < epochs; i++) {
+            log.info("Training... epoch: {}", i);
+            net.fit(trainData);
+
+            Evaluation evaluation = net.evaluate(testData);
+            System.out.println(evaluation.confusionToString());
+            System.out.println(evaluation.stats());
+
+            trainData.reset();
+            testData.reset();
+        }
+
+        log.info("Saving model...");
         File locationToSave = new File("src/main/resources/StockPriceLSTM_.zip");
 //        // saveUpdater: i.e., the state for Momentum, RMSProp, Adagrad etc. Save this to train your network more in the future
-//        ModelSerializer.writeModel(net, locationToSave, true);
+        ModelSerializer.writeModel(net, locationToSave, true);
 
         log.info("Load model...");
-//        net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
-        MultiLayerNetwork net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
+        net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
+//        MultiLayerNetwork net = ModelSerializer.restoreMultiLayerNetwork(locationToSave);
 
         log.info("Testing...");
 
@@ -106,8 +106,8 @@ public class BinancePricePrediction {
 
         int nExamples = realOutcomeIndex.length();
 
-        log.info("total Examples:{}", nExamples);
-        for (int i = 0; i < nExamples; i++) {
+        log.info("total Examples:{} printing first 100..", nExamples);
+        for (int i = 0; i < 100; i++) {
             int actual = (int) realOutcomeIndex.getDouble(i);
             int predicted = (int) guessIndex.getDouble(i);
             log.info("actual:{} predicted:{}",actual,predicted);
@@ -115,13 +115,6 @@ public class BinancePricePrediction {
 
         log.info("shape info:{} rows:{} columns:{}", labels.shapeInfoToString());
         log.info("shape info row 0:{} rows:{} columns:{}", labels.getRow(0).shapeInfoToString(), labels.getRow(0).rows(), labels.getRow(0).columns());
-
-                        //first 50
-//        for (int i = 0; i < 50; i++) {
-//            log.info("Data output:{} data labels:{}",(int)output.getRow(i).getDouble(0),(int)labels.getRow(i).getDouble(0));
-//        }
-
-
 
 
 
