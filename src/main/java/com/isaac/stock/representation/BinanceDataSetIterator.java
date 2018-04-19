@@ -40,8 +40,8 @@ public class BinanceDataSetIterator implements DataSetIterator {
     private File featuresDir = new File(baseDir, "features");
     private File labelsDir = new File(baseDir, "labels");
 
-    private int miniBatchSize = 472;
-    private int offsetIteration = 90;
+    private int miniBatchSize = 480;
+    private int offsetIteration = 180;
 
     public BinanceDataSetIterator(int maxIteration, int startIteration) {
         this.maxIteration = maxIteration;
