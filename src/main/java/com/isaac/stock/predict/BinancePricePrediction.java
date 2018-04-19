@@ -41,7 +41,7 @@ public class BinancePricePrediction {
     public static void main (String[] args) throws IOException {
 
         int batchSize = 64; // mini-batch size
-        int epochs = 4; // training epochs
+        int epochs = 20; // training epochs
 //        int epochs = 1; // training epochs
 
         NormalizerStandardize normalizer = new NormalizerStandardize();
